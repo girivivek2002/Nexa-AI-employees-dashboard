@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 
 import { motion } from "framer-motion";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const MotionBox = motion(Box);
@@ -19,6 +20,13 @@ const MotionBox = motion(Box);
 const DashboardHeader = () => {
     const theme = useTheme();
     const navigate = useNavigate();
+
+
+
+    // Get logged-in user from Redux
+    const user = useSelector(
+        (state) => state.auth?.user
+    );
 
     const isDark = theme.palette.mode === "dark";
 
@@ -151,7 +159,7 @@ const DashboardHeader = () => {
                                 color: "text.primary",
                             }}
                         >
-                            Good morning, Nexa
+                            Good morning, {user.name}
                         </Typography>
 
                         <Typography

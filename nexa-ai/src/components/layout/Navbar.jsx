@@ -1,4 +1,3 @@
-
 import {
     AppBar,
     Avatar,
@@ -16,13 +15,15 @@ import {
     MenuRounded,
     LightModeRounded,
     DarkModeRounded,
+    LogoutRounded,
 } from "@mui/icons-material";
 
 import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import { setThemeMode } from "../../store/slices/settingsSlice";
-// ⬆️ Change this path if your settingsSlice is located somewhere else.
+import { logout } from "../../store/slices/authSlice";
 
 const MotionIconButton = motion(IconButton);
 const MotionAvatar = motion(Avatar);
@@ -30,17 +31,48 @@ const MotionAvatar = motion(Avatar);
 export default function Navbar({ onMenuClick }) {
     const theme = useTheme();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
+    // Get logged-in user from Redux
+    const user = useSelector(
+        (state) => state.auth?.user
+    );
+
+    // Get theme from existing Redux settings
     const mode = useSelector(
         (state) => state.settings.themeMode
     );
 
     const isDark = mode === "dark";
 
+    // Theme toggle
     const handleThemeToggle = () => {
         dispatch(
-            setThemeMode(isDark ? "light" : "dark")
+            setThemeMode(
+                isDark ? "light" : "dark"
+            )
         );
+    };
+
+    // Logout
+    const handleLogout = () => {
+        dispatch(logout());
+
+        navigate("/login", {
+            replace: true,
+        });
+    };
+
+    // Avatar initial
+    const getInitial = () => {
+        if (!user?.name) {
+            return "U";
+        }
+
+        return user.name
+            .trim()
+            .charAt(0)
+            .toUpperCase();
     };
 
     return (
@@ -67,6 +99,7 @@ export default function Navbar({ onMenuClick }) {
                     position: "absolute",
                     inset: 0,
                     pointerEvents: "none",
+
                     background:
                         "linear-gradient(90deg, rgba(124,92,252,0.04), transparent 35%, rgba(34,211,238,0.04))",
                 },
@@ -103,16 +136,23 @@ export default function Navbar({ onMenuClick }) {
                         <MotionIconButton
                             color="inherit"
                             onClick={onMenuClick}
-                            whileHover={{ scale: 1.08 }}
-                            whileTap={{ scale: 0.92 }}
+                            whileHover={{
+                                scale: 1.08,
+                            }}
+                            whileTap={{
+                                scale: 0.92,
+                            }}
                             sx={{
                                 border: "1px solid",
                                 borderColor: "divider",
-                                bgcolor: "background.paper",
+                                bgcolor:
+                                    "background.paper",
 
                                 "&:hover": {
-                                    bgcolor: "action.hover",
-                                    color: "primary.main",
+                                    bgcolor:
+                                        "action.hover",
+                                    color:
+                                        "primary.main",
                                 },
                             }}
                         >
@@ -169,8 +209,11 @@ export default function Navbar({ onMenuClick }) {
                         background:
                             "linear-gradient(90deg, #7C5CFC, #22D3EE)",
 
-                        WebkitBackgroundClip: "text",
-                        WebkitTextFillColor: "transparent",
+                        WebkitBackgroundClip:
+                            "text",
+
+                        WebkitTextFillColor:
+                            "transparent",
                     }}
                 >
                     ✦ NEXA AI
@@ -181,12 +224,35 @@ export default function Navbar({ onMenuClick }) {
                     sx={{
                         display: "flex",
                         alignItems: "center",
+
                         gap: {
                             xs: 0.5,
                             sm: 1,
                         },
                     }}
                 >
+                    {/* User Name */}
+                    {user && (
+                        <Box
+                            sx={{
+                                display: {
+                                    xs: "none",
+                                    sm: "block",
+                                },
+                            }}
+                        >
+                            <Typography
+                                variant="body2"
+                                sx={{
+                                    fontWeight: 700,
+                                    mr: 0.5,
+                                }}
+                            >
+                                {user.name}
+                            </Typography>
+                        </Box>
+                    )}
+
                     {/* Theme Toggle */}
                     <Tooltip
                         title={
@@ -196,11 +262,15 @@ export default function Navbar({ onMenuClick }) {
                         }
                     >
                         <MotionIconButton
-                            onClick={handleThemeToggle}
+                            onClick={
+                                handleThemeToggle
+                            }
                             color="inherit"
                             whileHover={{
                                 scale: 1.08,
-                                rotate: isDark ? -10 : 10,
+                                rotate: isDark
+                                    ? -10
+                                    : 10,
                             }}
                             whileTap={{
                                 scale: 0.9,
@@ -217,12 +287,17 @@ export default function Navbar({ onMenuClick }) {
                                 },
 
                                 border: "1px solid",
-                                borderColor: "divider",
-                                bgcolor: "background.paper",
+                                borderColor:
+                                    "divider",
+
+                                bgcolor:
+                                    "background.paper",
 
                                 "&:hover": {
-                                    bgcolor: "action.hover",
-                                    color: "primary.main",
+                                    bgcolor:
+                                        "action.hover",
+                                    color:
+                                        "primary.main",
                                 },
 
                                 transition:
@@ -230,9 +305,13 @@ export default function Navbar({ onMenuClick }) {
                             }}
                         >
                             {isDark ? (
-                                <LightModeRounded fontSize="small" />
+                                <LightModeRounded
+                                    fontSize="small"
+                                />
                             ) : (
-                                <DarkModeRounded fontSize="small" />
+                                <DarkModeRounded
+                                    fontSize="small"
+                                />
                             )}
                         </MotionIconButton>
                     </Tooltip>
@@ -241,8 +320,12 @@ export default function Navbar({ onMenuClick }) {
                     <Tooltip title="Notifications">
                         <MotionIconButton
                             color="inherit"
-                            whileHover={{ scale: 1.08 }}
-                            whileTap={{ scale: 0.92 }}
+                            whileHover={{
+                                scale: 1.08,
+                            }}
+                            whileTap={{
+                                scale: 0.92,
+                            }}
                             sx={{
                                 width: {
                                     xs: 40,
@@ -255,12 +338,17 @@ export default function Navbar({ onMenuClick }) {
                                 },
 
                                 border: "1px solid",
-                                borderColor: "divider",
-                                bgcolor: "background.paper",
+                                borderColor:
+                                    "divider",
+
+                                bgcolor:
+                                    "background.paper",
 
                                 "&:hover": {
-                                    bgcolor: "action.hover",
-                                    color: "primary.main",
+                                    bgcolor:
+                                        "action.hover",
+                                    color:
+                                        "primary.main",
                                 },
                             }}
                         >
@@ -268,22 +356,34 @@ export default function Navbar({ onMenuClick }) {
                                 variant="dot"
                                 color="secondary"
                                 sx={{
-                                    "& .MuiBadge-badge": {
+                                    "& .MuiBadge-badge":
+                                    {
                                         minWidth: 7,
                                         height: 7,
                                     },
                                 }}
                             >
-                                <NotificationsNoneRounded fontSize="small" />
+                                <NotificationsNoneRounded
+                                    fontSize="small"
+                                />
                             </Badge>
                         </MotionIconButton>
                     </Tooltip>
 
                     {/* Profile */}
-                    <Tooltip title="Account">
+                    <Tooltip
+                        title={
+                            user?.name ||
+                            "Account"
+                        }
+                    >
                         <MotionAvatar
-                            whileHover={{ scale: 1.08 }}
-                            whileTap={{ scale: 0.94 }}
+                            whileHover={{
+                                scale: 1.08,
+                            }}
+                            whileTap={{
+                                scale: 0.94,
+                            }}
                             sx={{
                                 width: {
                                     xs: 36,
@@ -312,12 +412,58 @@ export default function Navbar({ onMenuClick }) {
                                 cursor: "pointer",
                             }}
                         >
-                            A
+                            {getInitial()}
                         </MotionAvatar>
                     </Tooltip>
+
+                    {/* Logout */}
+                    {user && (
+                        <Tooltip title="Logout">
+                            <MotionIconButton
+                                onClick={
+                                    handleLogout
+                                }
+                                color="inherit"
+                                whileHover={{
+                                    scale: 1.08,
+                                }}
+                                whileTap={{
+                                    scale: 0.92,
+                                }}
+                                sx={{
+                                    width: {
+                                        xs: 40,
+                                        sm: 42,
+                                    },
+
+                                    height: {
+                                        xs: 40,
+                                        sm: 42,
+                                    },
+
+                                    border: "1px solid",
+                                    borderColor:
+                                        "divider",
+
+                                    bgcolor:
+                                        "background.paper",
+
+                                    "&:hover": {
+                                        bgcolor:
+                                            "action.hover",
+                                        color:
+                                            "error.main",
+                                    },
+                                }}
+                            >
+                                <LogoutRounded
+                                    fontSize="small"
+                                />
+                            </MotionIconButton>
+                        </Tooltip>
+                    )}
                 </Box>
             </Toolbar>
         </AppBar>
     );
 }
-

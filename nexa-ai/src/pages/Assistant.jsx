@@ -1,23 +1,13 @@
-import { useEffect } from "react";
-
 import { Box } from "@mui/material";
-
 import { useDispatch, useSelector } from "react-redux";
 
 import {
     addMessage,
-    setMessages,
     clearMessages,
     setTyping,
 } from "../store/slices/chatSlice";
 
 import { askAI } from "../services/aiService";
-
-import {
-    getChatHistory,
-    saveChatMessage,
-    clearChatHistory,
-} from "../services/chatService";
 
 import AssistantHeader from "../components/assistant/AssistantHeader";
 import ChatContainer from "../components/assistant/ChatContainer";
@@ -34,32 +24,6 @@ export default function Assistant() {
         (state) => state.chat
     );
 
-    // Load chat history when Assistant opens
-    useEffect(() => {
-        const loadHistory = async () => {
-            try {
-                const history = await getChatHistory();
-
-                const formattedMessages = history.map(
-                    (message) => ({
-                        id: message._id,
-                        role: message.role,
-                        content: message.content,
-                    })
-                );
-
-                dispatch(setMessages(formattedMessages));
-            } catch (error) {
-                console.error(
-                    "Failed to load chat history:",
-                    error
-                );
-            }
-        };
-
-        loadHistory();
-    }, [dispatch]);
-
     const handleSend = async (text) => {
         const userMessage = {
             id: crypto.randomUUID(),
@@ -67,25 +31,15 @@ export default function Assistant() {
             content: text,
         };
 
-        // Show user message immediately
+        // Add user message
+        // chatSlice will automatically save it to localStorage
         dispatch(addMessage(userMessage));
-
-        // Save user message to MongoDB
-        try {
-            await saveChatMessage(
-                "user",
-                text
-            );
-        } catch (error) {
-            console.error(
-                "Failed to save user message:",
-                error
-            );
-        }
 
         dispatch(setTyping(true));
 
         try {
+            // Send only the message to AI
+            // Nothing is saved to MongoDB
             const response = await askAI(text);
 
             const assistantMessage = {
@@ -94,16 +48,9 @@ export default function Assistant() {
                 content: response,
             };
 
-            // Show AI response
-            dispatch(
-                addMessage(assistantMessage)
-            );
-
-            // Save AI response to MongoDB
-            await saveChatMessage(
-                "assistant",
-                response
-            );
+            // Add AI response
+            // chatSlice will automatically save it to localStorage
+            dispatch(addMessage(assistantMessage));
 
         } catch (error) {
             console.error(
@@ -125,17 +72,9 @@ export default function Assistant() {
         }
     };
 
-    const handleClear = async () => {
-        try {
-            await clearChatHistory();
-
-            dispatch(clearMessages());
-        } catch (error) {
-            console.error(
-                "Failed to clear chat history:",
-                error
-            );
-        }
+    const handleClear = () => {
+        // Clears Redux + removes chat from localStorage
+        dispatch(clearMessages());
     };
 
     return (

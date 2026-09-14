@@ -1,12 +1,8 @@
-import axios from "axios";
-
-const API_URL = `${import.meta.env.VITE_API_URL}/api/ai`
-
-
+import api from "./api";
 
 export const askAI = async (message) => {
-    const response = await axios.post(
-        `${API_URL}/chat`,
+    const response = await api.post(
+        "/ai/chat",
         {
             message,
         }

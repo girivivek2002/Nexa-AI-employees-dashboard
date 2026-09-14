@@ -1,6 +1,5 @@
 import { generateAIResponse } from "../services/aiService.js";
 
-
 export const chatWithAI = async (req, res) => {
     try {
         const { message } = req.body || {};
@@ -25,7 +24,9 @@ export const chatWithAI = async (req, res) => {
 
         res.status(500).json({
             success: false,
-            message: error.message || "Failed to generate AI response",
+            message:
+                error.message ||
+                "Failed to generate AI response",
         });
     }
 };

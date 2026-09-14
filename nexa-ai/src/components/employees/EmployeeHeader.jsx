@@ -7,6 +7,7 @@ import {
     Typography,
 } from "@mui/material";
 import { motion } from "framer-motion";
+import { useSelector } from "react-redux";
 
 const MotionBox = motion(Box);
 
@@ -14,6 +15,9 @@ export default function EmployeeHeader({
     count,
     onAddEmployee,
 }) {
+    const user = useSelector((state) => state.auth.user);
+    const isAdmin = user?.role === "admin";
+
     return (
         <MotionBox
             initial={{ opacity: 0, y: 20 }}
@@ -78,19 +82,21 @@ export default function EmployeeHeader({
                     </Box>
                 </Stack>
 
-                <Button
-                    variant="contained"
-                    startIcon={<AddRounded />}
-                    onClick={onAddEmployee}
-                    sx={{
-                        minWidth: { xs: "100%", sm: "auto" },
-                        px: 2.5,
-                        boxShadow:
-                            "0 8px 25px rgba(124,92,252,0.25)",
-                    }}
-                >
-                    Add Employee
-                </Button>
+                {isAdmin && (
+                    <Button
+                        variant="contained"
+                        startIcon={<AddRounded />}
+                        onClick={onAddEmployee}
+                        sx={{
+                            minWidth: { xs: "100%", sm: "auto" },
+                            px: 2.5,
+                            boxShadow:
+                                "0 8px 25px rgba(124,92,252,0.25)",
+                        }}
+                    >
+                        Add Employee
+                    </Button>
+                )}
             </Stack>
         </MotionBox>
     );

@@ -7,9 +7,15 @@ import {
     Typography,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import FreeQuoteButton from "./FreeQuoteButton";
 
 const LandingNavbar = () => {
     const navigate = useNavigate();
+
+    const { isAuthenticated } = useSelector(
+        (state) => state.auth
+    );
 
     return (
         <Container maxWidth="xl">
@@ -60,6 +66,39 @@ const LandingNavbar = () => {
                     </Button>
 
                     <Button
+                        onClick={() => {
+                            document
+                                .getElementById("contact")
+                                ?.scrollIntoView({
+                                    behavior: "smooth",
+                                });
+                        }}
+                        sx={{
+                            color: "text.secondary",
+                            display: {
+                                xs: "none",
+                                sm: "inline-flex",
+                            },
+
+                            "&:hover": {
+                                color: "text.primary",
+                                bgcolor: "action.hover",
+                            },
+                        }}
+                    >
+                        Contact
+                    </Button>
+
+                    {!isAuthenticated && (
+                        <Button
+                            variant="outlined"
+                            onClick={() => navigate("/login")}
+                        >
+                            Login
+                        </Button>
+                    )}
+
+                    <Button
                         variant="contained"
                         startIcon={<AutoAwesomeRounded />}
                         onClick={() => navigate("/assistant")}
@@ -81,6 +120,10 @@ const LandingNavbar = () => {
                     >
                         Try AI
                     </Button>
+
+                    <FreeQuoteButton>
+                        Get a Free Quote
+                    </FreeQuoteButton>
                 </Stack>
             </Box>
         </Container>

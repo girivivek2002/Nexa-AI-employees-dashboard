@@ -1,35 +1,94 @@
-import dotenv from "dotenv";
-
-dotenv.config();
-
+import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import aiRoutes from "./src/routes/aiRoutes.js";
 import connectDB from "./src/config/db.js";
+
 import employeeRoutes from "./src/routes/employeeRoutes.js";
-import chatRoutes from "./src/routes/chatRoutes.js";
+import aiRoutes from "./src/routes/aiRoutes.js";
+
+import authRoutes from "./src/routes/authRoutes.js";
+import contactRoutes from "./src/routes/contactRoutes.js";
+import newsletterRoutes from "./src/routes/newsletterRoutes.js";
+import quoteRoutes from "./src/routes/quoteRoutes.js";
+import adminRoutes from "./src/routes/adminRoutes.js";
 
 const app = express();
+const PORT = process.env.PORT || 5000;
 
-connectDB();
+const allowedOrigins = (process.env.FRONTEND_URL || "http://localhost:5173")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
 
-app.use(cors());
-app.use(express.json());
+app.use(
+    cors({
+        origin(origin, callback) {
+            if (!origin || allowedOrigins.includes(origin)) {
+                return callback(null, true);
+            }
+            return callback(new Error("CORS origin not allowed"));
+        },
+        credentials: true,
+    })
+);
 
-app.get("/", (req, res) => {
+app.use(express.json({ limit: "1mb" }));
+app.use(express.urlencoded({ extended: true }));
+
+app.get("/api/health", (req, res) => {
     res.json({
         success: true,
-        message: "NEXA AI server is running",
+        message: "NEXA AI API is running",
+        timestamp: new Date().toISOString(),
     });
 });
 
-
 app.use("/api/employees", employeeRoutes);
 app.use("/api/ai", aiRoutes);
-app.use("/api/chat", chatRoutes);
 
-const PORT = process.env.PORT || 5000;
+app.use("/api/auth", authRoutes);
+app.use("/api/contact", contactRoutes);
+app.use(
+    "/api/newsletter",
+    newsletterRoutes
+);
+app.use("/api/quote", quoteRoutes);
+app.use("/api/admin", adminRoutes);
 
-app.listen(PORT, () => {
-    console.log(`NEXA AI server running on port ${PORT}`);
+app.use((req, res) => {
+    res.status(404).json({
+        success: false,
+        message: `Route not found: ${req.method} ${req.originalUrl}`,
+    });
 });
+
+app.use((err, req, res, next) => {
+    console.error("Unhandled server error:", err);
+
+    if (err.message === "CORS origin not allowed") {
+        return res.status(403).json({
+            success: false,
+            message: "CORS origin not allowed",
+        });
+    }
+
+    res.status(err.statusCode || 500).json({
+        success: false,
+        message: err.message || "Internal server error",
+    });
+});
+
+const startServer = async () => {
+    try {
+        await connectDB();
+
+        app.listen(PORT, () => {
+            console.log(`NEXA AI API running on port ${PORT}`);
+        });
+    } catch (error) {
+        console.error("Server startup failed:", error.message);
+        process.exit(1);
+    }
+};
+
+startServer();

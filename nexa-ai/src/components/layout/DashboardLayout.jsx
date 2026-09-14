@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Box } from "@mui/material";
 import { Outlet } from "react-router-dom";
@@ -21,9 +20,9 @@ export default function DashboardLayout() {
         <Box
             sx={{
                 minHeight: "100vh",
+                width: "100%",
                 bgcolor: "background.default",
                 color: "text.primary",
-
                 transition:
                     "background-color 0.3s ease, color 0.3s ease",
             }}
@@ -48,7 +47,6 @@ export default function DashboardLayout() {
 
                     minHeight: "100vh",
                     minWidth: 0,
-
                     boxSizing: "border-box",
                 }}
             >
@@ -66,9 +64,10 @@ export default function DashboardLayout() {
                         p: {
                             xs: 1.5,
                             sm: 2,
-                            md: 3,
-                            lg: 4,
+                            md: 2.5,
                         },
+
+                        m: 0,
                     }}
                 >
                     <Outlet />
@@ -77,4 +76,3 @@ export default function DashboardLayout() {
         </Box>
     );
 }
-

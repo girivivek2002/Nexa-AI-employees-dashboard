@@ -1,9 +1,10 @@
 import dotenv from "dotenv";
+dotenv.config();
 import mongoose from "mongoose";
-import Employee from "../src/models/Employee.js";
+import Employee from "../models/Employee.js";
 import dns from "dns";
 
-dotenv.config();
+
 
 
 dns.setServers(["8.8.8.8", "1.1.1.1"]);
@@ -155,6 +156,7 @@ const employees = [
 ];
 
 const seedEmployees = async () => {
+    console.log(process.env.MONGODB_URI)
     try {
         await mongoose.connect(process.env.MONGODB_URI);
 

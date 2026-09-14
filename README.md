@@ -1,672 +1,846 @@
-NEXA AI --- Employee Intelligence & AI Assistant
+# ✦ NEXA AI
 
-NEXA AI is a modern employee management and workforce intelligence
-platform built with the MERN stack. It combines employee data
-management, workforce analytics, and a Gemini-powered AI assistant into
-a single responsive dashboard.
+NEXA AI is a full-stack AI-powered recruitment and employee management platform. It extends the original Round 1 frontend with a Node.js/Express backend, MongoDB persistence, JWT authentication, role-based admin access, contact submissions, newsletter subscriptions, free quote requests, and an AI assistant.
 
-Live Architecture
+> **Important:** This project uses the same frontend website submitted in Round 1. The existing frontend was extended and connected to the backend rather than building a new frontend.
 
-GitHub
-├── nexa-ai/ → React + Vite frontend → Vercel
-└── server/ → Node + Express backend → Render
-├── MongoDB Atlas
-└── Google Gemini API
+---
 
-Features
+## 🚀 Features
 
-Dashboard
+### 🤖 AI Assistant
 
-Workforce overview
+- AI-powered chat assistant
+- AI responses are generated through the backend
+- Chat messages are stored only in the browser using `localStorage`
+- Chat history is separated by authenticated user
+- Clearing chat removes the user's stored chat from `localStorage`
+- AI chat messages are not stored in MongoDB
 
-Total employee count
+### 🔐 User Authentication
 
-Active, away, and inactive employee statistics
+- User registration
+- User login
+- JWT authentication
+- JWT expiration: 7 days
+- Protected profile route
+- Protected application pages
+- Logout
+- Logged-in user's name displayed in the application
+- Password hashing with bcrypt
+- Passwords are never stored as plain text
+- Profile update
+- Change password
 
-Department distribution
+### 📩 Contact Form
 
-Workforce distribution
+- Name
+- Email
+- Phone
+- Subject
+- Message
+- Client-side validation
+- Server-side validation
+- MongoDB persistence
+- Success/error feedback
+- Admin viewing and deletion
 
-Recent workforce activity
+### 📰 Newsletter Subscription
 
-Responsive dashboard UI
+- Newsletter subscription from the website footer
+- Email validation
+- Server-side validation
+- MongoDB persistence
+- Duplicate subscription detection
+- Exact duplicate response: `You are already subscribed`
+- Frontend success/error feedback
 
-Employee Management
+### 💬 Get a Free Quote
 
-View employees from MongoDB
+The homepage includes a **Get a Free Quote** button that opens a modal.
 
-Search and filter employees
+Fields:
 
-Filter by department and status
+- Name
+- Email
+- Phone
+- Service Required
+- Budget
+- Message
 
-Employee cards and profile details
+Features:
 
-Add new employees through a form
+- Form validation
+- Server-side validation
+- MongoDB persistence
+- Submission confirmation
+- Admin visibility
 
-Form validation
+### 👑 Admin Panel
 
-Employee status management
+Admin-only dashboard available at `/admin`.
 
-Skills, experience, location, role, and joining-date information
+ADMIN_EMAIL= nexaadmin@gmail.com
+ADMIN_PASSWORD= NexaAdmin@123
 
-Newly added employees are persisted in MongoDB
+Admin features:
 
-AI Assistant
+- View contact submissions
+- Delete contact submissions
+- View registered users
+- View quote requests
+- Protected admin APIs
+- Role-based authorization
 
-NEXA AI provides a general-purpose conversational assistant with access
-to current employee data.
+---
 
-It can answer: - General knowledge questions - Technical and programming
-questions - Educational questions - Career and interview questions -
-Company and workforce questions - Employee-related questions -
-Department and role questions - Location and experience questions -
-Workforce statistics
+# 🗄️ Database Collections
 
-For company-related questions, the assistant uses employee data
-retrieved from MongoDB instead of inventing company information.
+MongoDB is used as the application's database.
 
-Persistent Chat History
+The project implements the required four collections.
 
-User messages are stored in MongoDB
+## Users
 
-AI responses are stored in MongoDB
+Fields:
 
-Chat history is loaded when the Assistant page opens
-
-Chat history remains available after browser refresh
-
-Chat history can be cleared from the Assistant interface
-
-Redux is used for the active chat state while MongoDB provides
-persistence
-
-Analytics
-
-Department analytics
-
-Department bar chart
-
-Department pie chart
-
-Employee status distribution
-
-Experience distribution
-
-Location analytics
-
-Workforce trend
-
-Workforce summary and insights
-
-Analytics are generated from current MongoDB employee data
-
-UI and UX
-
-Material UI based interface
-
-Responsive design
-
-Framer Motion animations
-
-Dashboard navigation
-
-Toast notifications
-
-Empty states
-
-Loading states
-
-Dialogs and drawers
-
-Modern employee cards and analytics components
-
-Technology Stack
-
-Frontend
-
-React
-
-Vite
-
-React Router DOM
-
-Redux Toolkit
-
-React Redux
-
-Axios
-
-Material UI (MUI)
-
-Framer Motion
-
-Recharts
-
-React Hook Form
-
-Zod
-
-React Toastify
-
-Backend
-
-Node.js
-
-Express.js
-
-MongoDB
-
-Mongoose
-
-CORS
-
-dotenv
-
-Google Gemini API
-
-@google/genai
-
-Database
-
-MongoDB Atlas
-
-Mongoose ODM
-
-Deployment
-
-Vercel --- React frontend
-
-Render --- Node/Express backend
-
-MongoDB Atlas --- database
-
-Project Structure
-
-NEXA-AI/
-│
-├── nexa-ai/ # React frontend
-│ ├── public/
-│ ├── src/
-│ │ ├── components/
-│ │ │ ├── assistant/
-│ │ │ ├── analytics/
-│ │ │ ├── dashboard/
-│ │ │ ├── employees/
-│ │ │ ├── layout/
-│ │ │ └── common/
-│ │ │
-│ │ ├── data/
-│ │ ├── hooks/
-│ │ ├── pages/
-│ │ ├── services/
-│ │ ├── store/
-│ │ ├── theme/
-│ │ ├── App.jsx
-│ │ └── main.jsx
-│ │
-│ ├── .env
-│ ├── vercel.json
-│ ├── package.json
-│ └── vite.config.js
-│
-└── server/ # Node/Express backend
-├── src/
-│ ├── config/
-│ │ └── db.js
-│ ├── controllers/
-│ │ ├── aiController.js
-│ │ ├── chatController.js
-│ │ └── employeeController.js
-│ ├── models/
-│ │ ├── Employee.js
-│ │ └── ChatMessage.js
-│ ├── routes/
-│ │ ├── aiRoutes.js
-│ │ ├── chatRoutes.js
-│ │ └── employeeRoutes.js
-│ ├── seed/
-│ │ └── employees.js
-│ └── services/
-│ └── aiService.js
-│
-├── .env
-├── package.json
-└── server.js
-
-API Endpoints
-
-Health Check
-
-GET /
-
-Returns the backend server status.
-
-Employees
-
-GET /api/employees
-
-Fetches employees from MongoDB.
-
-POST /api/employees
-
-Creates a new employee.
-
-AI
-
-POST /api/ai/chat
-
-Sends a user message to the AI assistant.
-
-Example request:
-
-{
-"message": "How many employees are in Engineering?"
-}
-
-Chat History
-
-GET /api/chat
-
-Fetches saved chat history.
-
-POST /api/chat
-
-Saves a user or assistant message.
-
-Example:
-
-{
-"role": "user",
-"content": "How many employees do we have?"
-}
-
-DELETE /api/chat
-
-Clears the stored chat history.
-
-Employee Data Model
-
-The employee collection contains fields such as:
-
+```text
+id
 name
 email
+password
 role
-department
-location
-experience
-status
-skills
-joined
 createdAt
-updatedAt
+```
 
-Supported employee statuses:
+Roles:
 
-Active
-Away
-Inactive
+```text
+user
+admin
+```
 
-AI Architecture
+Passwords are hashed using bcrypt.
 
-The AI assistant uses a MongoDB-aware prompt.
+## Contacts
 
-User
-↓
-React Assistant
-↓
-Axios
-↓
-POST /api/ai/chat
-↓
-AI Controller
-↓
-AI Service
-↓
-MongoDB
-↓
-Current Employee Data
-↓
-Google Gemini
-↓
-AI Response
-↓
-Redux Chat State
-↓
-Chat UI
+Fields:
 
-The AI service retrieves current employees from MongoDB and includes
-that information as context when generating a response.
+```text
+id
+name
+email
+phone
+subject
+message
+createdAt
+```
 
-General Questions
+## Newsletter
 
-For questions unrelated to the organization, Gemini can answer using its
-general capabilities.
+Fields:
 
-Example:
+```text
+id
+email
+subscribedAt
+```
 
-What is React?
+## Quotes
 
-Company Questions
+Fields:
 
-For workforce-related questions, the assistant uses the current employee
-data.
+```text
+id
+name
+email
+phone
+serviceRequired
+budget
+message
+createdAt
+```
 
-Example:
+---
 
-How many employees do we have?
+# 🛠️ Technology Stack
 
-Which department has the most employees?
+## Frontend
 
-Who works in Engineering?
+- React
+- Vite
+- React Router DOM
+- Redux Toolkit
+- Material UI (MUI)
+- Axios
+- React Hook Form
+- Zod
+- React Toastify
+- Framer Motion
 
-Mixed Questions
+## Backend
 
-The assistant can combine general knowledge with company data.
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- JWT
+- bcryptjs
+- CORS
+- dotenv
 
-Example:
+## AI
 
-What does a DevOps engineer do and who are our DevOps engineers?
+- AI API integrated through the backend service
+- Frontend AI requests handled by `aiService.js`
+- Backend AI processing handled by the AI controller/service
 
-State Management
+---
 
-Redux Toolkit is used for chat state.
+# 📁 Project Structure
 
-The chat state contains:
+## Frontend
 
-messages
-isTyping
+```text
+frontend/
+├── src/
+│   ├── components/
+│   │   ├── assistant/
+│   │   ├── auth/
+│   │   ├── dashboard/
+│   │   ├── employees/
+│   │   ├── landing/
+│   │   ├── layout/
+│   │   └── settings/
+│   │
+│   ├── pages/
+│   │   ├── Analytics.jsx
+│   │   ├── Assistant.jsx
+│   │   ├── Dashboard.jsx
+│   │   ├── Employees.jsx
+│   │   ├── Landing.jsx
+│   │   ├── Login.jsx
+│   │   ├── Register.jsx
+│   │   ├── Settings.jsx
+│   │   └── Admin.jsx
+│   │
+│   ├── services/
+│   │   ├── api.js
+│   │   ├── aiService.js
+│   │   ├── authService.js
+│   │   ├── contactService.js
+│   │   ├── newsletterService.js
+│   │   └── quoteService.js
+│   │
+│   ├── store/
+│   │   ├── slices/
+│   │   └── store.js
+│   │
+│   ├── App.jsx
+│   └── main.jsx
+│
+├── package.json
+└── .env
+```
 
-Messages are loaded from MongoDB when the Assistant page opens.
+## Backend
 
-The application uses a setMessages action to replace the Redux history
-with the database history, preventing duplicate messages during
-development refresh/effect behavior.
+```text
+backend/
+├── config/
+│   └── db.js
+│
+├── controllers/
+│   ├── adminController.js
+│   ├── aiController.js
+│   ├── authController.js
+│   ├── contactController.js
+│   ├── newsletterController.js
+│   └── quoteController.js
+│
+├── middleware/
+│   └── authMiddleware.js
+│
+├── models/
+│   ├── User.js
+│   ├── Contact.js
+│   ├── Newsletter.js
+│   └── Quote.js
+│
+├── routes/
+│   ├── adminRoutes.js
+│   ├── aiRoutes.js
+│   ├── authRoutes.js
+│   ├── contactRoutes.js
+│   ├── newsletterRoutes.js
+│   └── quoteRoutes.js
+│
+├── services/
+│   └── aiService.js
+│
+├── seed/
+│   └── adminSeed.js
+│
+├── .env
+├── .gitignore
+├── package.json
+└── server.js
+```
 
-Form Validation
+---
 
-Employee creation uses:
+# ⚙️ Installation and Setup
 
-React Hook Form
+## Prerequisites
 
-Zod
+Install:
 
-The employee form validates required employee information before sending
-it to the backend.
+- Node.js
+- npm
+- MongoDB Atlas account or MongoDB instance
+- Required AI API key
 
-Environment Variables
+## 1. Clone the Repository
 
-Frontend
+```bash
+git clone YOUR_GITHUB_REPOSITORY_URL
+cd YOUR_PROJECT_FOLDER
+```
 
-Create:
+---
 
-nexa-ai/.env
+# 🔧 Backend Setup
 
-VITE_API_URL=https://your-render-backend-url.onrender.com
+Navigate to the backend:
 
-The frontend uses this value for API requests.
+```bash
+cd backend
+```
 
-Backend
+Install dependencies:
 
-Create:
-
-server/.env
-
-PORT=5000
-MONGODB_URI=your_mongodb_connection_string
-GEMINI_API_KEY=your_gemini_api_key
-
-In production, environment variables are configured through the hosting
-provider.
-
-Security
-
-Do not commit secret environment files to GitHub.
-
-The .gitignore should include:
-
-node_modules/
-.env
-dist/
-.DS_Store
-
-Never expose:
-
-MongoDB credentials
-
-Gemini API keys
-
-Other private environment variables
-
-The Gemini API key is used by the backend rather than directly by the
-React browser application.
-
-Local Development
-
-1. Clone the repository
-
-git clone <your-repository-url>
-cd NEXA-AI
-
-2. Install frontend dependencies
-
-cd nexa-ai
+```bash
 npm install
+```
 
-3. Configure frontend environment
+Create a `.env` file inside the backend directory.
 
-Create:
+Example:
 
-.env
-
-VITE_API_URL=http://localhost:5000
-
-4. Start the frontend
-
-npm run dev
-
-5. Install backend dependencies
-
-Open another terminal:
-
-cd server
-npm install
-
-6. Configure backend environment
-
-Create:
-
-server/.env
-
+```env
 PORT=5000
-MONGODB_URI=your_mongodb_connection_string
-GEMINI_API_KEY=your_gemini_api_key
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_strong_jwt_secret
+FRONTEND_URL=http://localhost:5173
+AI_API_KEY=your_ai_api_key
+```
 
-7. Start the backend
+> Use the exact AI environment variable expected by the project's AI service if it differs from `AI_API_KEY`.
 
+Start the backend:
+
+```bash
 npm start
+```
 
-The backend runs locally on:
+Backend:
 
+```text
 http://localhost:5000
+```
 
-Production Deployment
+---
 
-Frontend --- Vercel
+# 🎨 Frontend Setup
 
-The frontend is located in:
+Open another terminal and navigate to the frontend:
 
-nexa-ai/
+```bash
+cd frontend
+```
 
-Vercel configuration:
+Install dependencies:
 
-Framework: Vite
-Root Directory: nexa-ai
-Build Command: npm run build
-Output Directory: dist
+```bash
+npm install
+```
 
-The production environment variable is:
+Create a `.env` file:
 
-VITE_API_URL=https://your-render-backend-url.onrender.com
+```env
+VITE_API_URL=http://localhost:5000/api
+```
 
-A vercel.json rewrite is included so React Router routes work
-correctly when directly refreshed:
+Start the frontend:
 
-{
-"rewrites": [
-{
-"source": "/(.*)",
-"destination": "/index.html"
-}
-]
-}
+```bash
+npm run dev
+```
 
-Backend --- Render
+Frontend:
 
-The backend is located in:
+```text
+http://localhost:5173
+```
 
-server/
+---
 
-Render configuration:
+# 👑 Admin Account
 
-Runtime: Node
-Root Directory: server
-Build Command: npm install
-Start Command: npm start
+A seed script is provided for creating the admin account.
 
-Required environment variables:
+From the backend directory:
 
-MONGODB_URI
-GEMINI_API_KEY
+```bash
+npm run seed:admin
+```
 
-Render supplies the production PORT environment variable.
+## Admin Credentials
 
-Database --- MongoDB Atlas
+**Replace the values below with the exact credentials configured in your `adminSeed.js` before submitting the project.**
 
-MongoDB Atlas hosts the application database.
+```text
+Email: admin@nexaai.com
+Password: YOUR_ADMIN_PASSWORD
+Role: admin
+```
 
-The backend connects using:
+> Do not use these placeholder credentials unless they are actually configured by your seed script.
 
-MONGODB_URI
+---
 
-The Atlas network configuration must allow the deployed backend to
-connect to the cluster.
+# 🔑 Authentication
 
-Error Handling
+Authentication uses JWT.
 
-The application includes handling for:
+Flow:
 
-Failed employee requests
+```text
+Register / Login
+       ↓
+Backend validation
+       ↓
+bcrypt password verification
+       ↓
+JWT generated
+       ↓
+Token stored in localStorage
+       ↓
+Axios sends JWT with protected requests
+       ↓
+Backend validates JWT
+       ↓
+Protected resource returned
+```
 
-Failed employee creation
+JWT expiration:
 
-Failed AI requests
+```text
+7 days
+```
 
-Invalid employee form data
+---
 
-Duplicate employee email addresses
+# 🔒 Protected Routes
 
-MongoDB connection failures
+Authenticated application routes include:
 
-Temporary Gemini availability errors
+```text
+/dashboard
+/assistant
+/employees
+/analytics
+/settings
+```
 
-Gemini quota/rate-limit errors
+Admin route:
 
-The backend logs server-side errors while the frontend displays
-user-friendly feedback.
+```text
+/admin
+```
 
-Current AI Limitations
+Unauthenticated users are redirected to:
 
-The current employee data represents the organization's current state.
+```text
+/login
+```
 
-Questions requiring historical workforce information, such as:
+Users without the admin role cannot access the admin panel.
 
-How has our workforce changed over the last month?
+---
 
-require historical employee activity records to provide an accurate
-answer.
+# 🌐 API Endpoints
 
-A future version can introduce workforce history for:
+## Authentication
 
-Employee joined events
+```text
+POST /api/auth/register
+POST /api/auth/login
+GET  /api/auth/profile
+PUT  /api/auth/profile
+PUT  /api/auth/change-password
+```
 
-Employee departure events
+## Contact
 
-Department changes
+```text
+POST /api/contact
+```
 
-Role changes
+## AI
+
+```text
+POST /api/ai/chat
+```
+
+## Newsletter
+
+```text
+POST /api/newsletter/subscribe
+```
+
+## Quote
+
+```text
+POST /api/quote
+```
+
+## Admin
 
-Status changes
-
-Workforce growth trends
-
-Future Improvements
-
-Potential enhancements include:
-
-Authentication and authorization
-
-User-specific chat histories
-
-Multiple AI conversations
-
-Conversation titles
-
-Employee edit and delete operations
-
-Workforce activity/history collection
-
-Advanced AI actions
-
-AI-generated workforce insights
-
-Export analytics reports
-
-Role-based access control
-
-Pagination for large employee collections
-
-Advanced search and filtering
-
-Production logging and monitoring
-
-More robust AI model fallback handling
-
-Screens / Routes
-
-The application currently contains:
-
-/ → Landing page
-/dashboard → Workforce dashboard
-/assistant → NEXA AI assistant
-/employees → Employee management
-/analytics → Workforce analytics
-/settings → Application settings
-
-Author
-
-Built as a full-stack MERN application demonstrating:
-
-Modern React development
-
-REST API development
-
-MongoDB data persistence
-
-AI integration
-
-Redux state management
-
-Data visualization
-
-Form validation
-
-Responsive UI development
-
-Cloud deployment
-
-Frontend/backend separation
-
-License
-
-This project is intended for portfolio, learning, and assignment
-purposes.
+```text
+GET    /api/admin/contacts
+DELETE /api/admin/contacts/:id
+GET    /api/admin/users
+GET    /api/admin/quotes
+```
+
+All admin endpoints require a valid authenticated admin token.
+
+---
+
+# 🤖 AI Chat Storage
+
+AI conversations are intentionally not stored in MongoDB.
+
+The flow is:
+
+```text
+User Message
+     ↓
+Assistant.jsx
+     ↓
+aiService.js
+     ↓
+POST /api/ai/chat
+     ↓
+Backend AI Service
+     ↓
+AI Response
+     ↓
+Redux Chat Slice
+     ↓
+localStorage
+```
+
+Each authenticated user has separate local chat storage.
+
+When the user clicks **Clear Chat**:
+
+```text
+Clear Chat
+    ↓
+Redux messages cleared
+    ↓
+localStorage chat removed
+```
+
+This prevents users from sharing the same locally stored conversation.
+
+---
+
+# 📩 Contact Form Flow
+
+```text
+Contact Form
+     ↓
+Frontend validation
+     ↓
+POST /api/contact
+     ↓
+Server validation
+     ↓
+MongoDB
+     ↓
+Success/Error response
+     ↓
+Frontend feedback
+```
+
+---
+
+# 📰 Newsletter Flow
+
+```text
+Footer Newsletter
+       ↓
+Email validation
+       ↓
+POST /api/newsletter/subscribe
+       ↓
+Server validation
+       ↓
+Check duplicate email
+       ↓
+MongoDB
+       ↓
+Success/Error response
+```
+
+For an existing email:
+
+```text
+You are already subscribed
+```
+
+---
+
+# 💬 Quote Flow
+
+```text
+Get a Free Quote
+       ↓
+Modal opens
+       ↓
+User fills form
+       ↓
+Frontend validation
+       ↓
+POST /api/quote
+       ↓
+Server validation
+       ↓
+MongoDB
+       ↓
+Confirmation
+       ↓
+Visible in Admin Panel
+```
+
+---
+
+# 👑 Admin Flow
+
+```text
+Admin Login
+     ↓
+JWT with admin role
+     ↓
+Protected Admin Route
+     ↓
+/admin
+     ↓
+Contacts | Users | Quotes
+```
+
+Admin API requests include the JWT through the frontend Axios API configuration.
+
+---
+
+# 🔐 Security
+
+The application includes:
+
+- bcrypt password hashing
+- JWT authentication
+- 7-day JWT expiration
+- Protected routes
+- Admin role authorization
+- Server-side validation
+- CORS configuration
+- Environment variables for secrets
+- Password exclusion from normal user responses
+- No plain-text password storage
+
+Never commit:
+
+```text
+.env
+```
+
+to the repository.
+
+---
+
+# 🌍 Deployment
+
+The application can be deployed using:
+
+```text
+Frontend → Vercel
+Backend  → Render
+Database → MongoDB Atlas
+```
+
+## Production Backend Environment Variables
+
+Example:
+
+```env
+PORT=5000
+MONGO_URI=your_mongodb_atlas_connection_string
+JWT_SECRET=your_production_jwt_secret
+FRONTEND_URL=https://your-frontend-domain.com
+AI_API_KEY=your_ai_api_key
+```
+
+## Production Frontend Environment Variable
+
+```env
+VITE_API_URL=https://your-backend-domain.com/api
+```
+
+The backend CORS configuration must allow the deployed frontend domain.
+
+---
+
+# 🧪 Testing Checklist
+
+## Authentication
+
+- [ ] Register a new user
+- [ ] Login
+- [ ] JWT is returned
+- [ ] JWT expires after 7 days
+- [ ] Profile loads
+- [ ] User name appears after login
+- [ ] Logout clears authentication data
+- [ ] Protected pages require authentication
+- [ ] Passwords are stored hashed
+
+## Contact
+
+- [ ] Submit valid contact form
+- [ ] Invalid required fields are rejected
+- [ ] Server-side validation works
+- [ ] Success message appears
+- [ ] Error message appears when appropriate
+- [ ] Submission appears in admin panel
+- [ ] Admin can delete submission
+
+## Newsletter
+
+- [ ] Subscribe with valid email
+- [ ] Invalid email is rejected
+- [ ] Email is saved in MongoDB
+- [ ] Duplicate email returns `You are already subscribed`
+- [ ] Frontend displays success/error feedback
+
+## Free Quote
+
+- [ ] Get a Free Quote button opens modal
+- [ ] Name field works
+- [ ] Email field works
+- [ ] Phone field works
+- [ ] Service Required dropdown works
+- [ ] Budget dropdown works
+- [ ] Message field works
+- [ ] Validation works
+- [ ] Quote is saved
+- [ ] Confirmation appears
+- [ ] Quote appears in admin panel
+
+## Admin
+
+- [ ] Admin can log in
+- [ ] `/admin` is accessible to admin
+- [ ] Normal users cannot access `/admin`
+- [ ] Contacts are displayed
+- [ ] Contacts can be deleted
+- [ ] Users are displayed
+- [ ] Quotes are displayed
+- [ ] Passwords are not exposed
+
+## AI Assistant
+
+- [ ] AI request works
+- [ ] User message appears
+- [ ] AI response appears
+- [ ] Chat persists after page refresh
+- [ ] Different users have separate local chat
+- [ ] Clear Chat removes local chat
+- [ ] AI chat is not stored in MongoDB
+
+## Production
+
+- [ ] MongoDB Atlas is connected
+- [ ] Backend is deployed
+- [ ] Frontend is deployed
+- [ ] Production CORS is configured
+- [ ] `VITE_API_URL` points to the live backend
+- [ ] Live authentication tested
+- [ ] Live contact API tested
+- [ ] Live newsletter API tested
+- [ ] Live quote API tested
+- [ ] Live admin APIs tested
+- [ ] Live AI API tested
+
+---
+
+# 📝 Notes
+
+- The original Round 1 frontend has been retained.
+- Backend functionality was integrated into the existing frontend.
+- MongoDB is used for Users, Contacts, Newsletter, and Quotes.
+- AI chat history is intentionally stored only in the browser.
+- Admin functionality is protected using JWT authentication and role-based authorization.
+- Sensitive environment variables must not be committed to Git.
+
+---
+
+# 👨‍💻 Project
+
+## NEXA AI
+
+An AI-powered full-stack recruitment and employee management platform.
+
+### Core Technologies
+
+```text
+React
+Material UI
+Redux Toolkit
+Node.js
+Express.js
+MongoDB
+Mongoose
+JWT
+bcrypt
+AI API
+```
+
+---
+
+## 📌 Submission Architecture
+
+```text
+                    NEXA AI
+                       │
+          ┌────────────┴────────────┐
+          │                         │
+      Frontend                  Backend API
+    React + MUI              Node + Express
+          │                         │
+          │                         ├── Authentication
+          │                         ├── Contact
+          │                         ├── Newsletter
+          │                         ├── Quotes
+          │                         ├── Admin
+          │                         └── AI
+          │                         │
+          └──────────────┬──────────┘
+                         │
+                    MongoDB Atlas
+                         │
+                Users / Contacts
+                Newsletter / Quotes
+```

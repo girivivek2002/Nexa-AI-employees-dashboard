@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { ThemeProvider } from "@mui/material/styles";
+import { CssBaseline } from "@mui/material";
 import { useSelector } from "react-redux";
 
 import { createAppTheme } from "./theme";
@@ -43,6 +44,7 @@ export default function AppTheme({ children }) {
 
     return (
         <ThemeProvider theme={theme}>
+            <CssBaseline />
             {children}
         </ThemeProvider>
     );

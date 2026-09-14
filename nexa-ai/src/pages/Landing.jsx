@@ -7,6 +7,10 @@ import AIPreview from "../components/landing/AIPreview";
 import FeatureMarquee from "../components/landing/FeatureMarquee";
 import IntelligenceSection from "../components/landing/IntelligenceSection";
 import BottomCTA from "../components/landing/BottomCTA";
+import ContactSection from "../components/landing/ContactSection";
+
+import LandingFooter from "../components/landing/LandingFooter";
+
 
 const Landing = () => {
     return (
@@ -126,7 +130,40 @@ const Landing = () => {
                 }}
             >
                 <BottomCTA />
+
             </Box>
+            <Box
+                sx={{
+                    position: "relative",
+                    zIndex: 2,
+                    width: "100%",
+                }}
+            >
+
+
+            </Box>
+
+            <Box
+                sx={{
+                    position: "relative",
+                    zIndex: 2,
+                    width: "100%",
+                }}
+            >
+                <ContactSection />
+            </Box>
+            <Box
+                sx={{
+                    position: "relative",
+                    zIndex: 2,
+                    width: "100%",
+                }}
+            >
+                <LandingFooter />
+
+            </Box>
+
+
         </Box>
     );
 };
