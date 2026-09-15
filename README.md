@@ -6,6 +6,13 @@ NEXA AI is a full-stack AI-powered recruitment and employee management platform.
 
 ---
 
+### 👑 Admin Panel
+
+Admin-only dashboard available at `/admin`.
+
+ADMIN_EMAIL= nexaadmin@gmail.com
+ADMIN_PASSWORD= NexaAdmin@123
+
 ## 🚀 Features
 
 ### 🤖 AI Assistant
