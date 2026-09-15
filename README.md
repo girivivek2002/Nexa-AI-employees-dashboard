@@ -6,6 +6,9 @@ NEXA AI is a full-stack AI-powered recruitment and employee management platform.
 
 ---
 
+### Live LINK
+link = https://nexa-ai-employees-dashboard.vercel.app
+
 ### 👑 Admin Panel
 
 Admin-only dashboard available at `/admin`.
@@ -312,8 +315,8 @@ Install:
 ## 1. Clone the Repository
 
 ```bash
-git clone YOUR_GITHUB_REPOSITORY_URL
-cd YOUR_PROJECT_FOLDER
+git clone https://github.com/girivivek2002/Nexa-AI-employees-dashboard
+
 ```
 
 ---
