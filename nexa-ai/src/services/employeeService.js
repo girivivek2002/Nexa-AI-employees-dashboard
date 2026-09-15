@@ -14,3 +14,11 @@ export const createEmployee = async (employee) => {
 
     return response.data.employee;
 };
+
+export const deleteEmployee = async (id) => {
+    const response = await api.delete(
+        `/employees/${id}`
+    );
+
+    return response.data;
+};

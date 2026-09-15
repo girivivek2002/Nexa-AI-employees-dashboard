@@ -2,6 +2,7 @@ import {
     EmailRounded,
     LocationOnRounded,
     ArrowForwardRounded,
+    DeleteRounded,
 } from "@mui/icons-material";
 
 import {
@@ -15,6 +16,7 @@ import {
     Typography,
 } from "@mui/material";
 
+import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
 
 const MotionPaper = motion(Paper);
@@ -31,7 +33,14 @@ export default function EmployeeCard({
     employee,
     index,
     onViewProfile,
+    onDelete,
 }) {
+    const user = useSelector(
+        (state) => state.auth.user
+    );
+
+    const isAdmin = user?.role === "admin";
+
     const avatarColor =
         avatarColors[index % avatarColors.length];
 
@@ -72,7 +81,6 @@ export default function EmployeeCard({
                 height: "100%",
                 borderRadius: 3,
 
-                // Uses your global theme
                 bgcolor: "background.paper",
                 border: "1px solid",
                 borderColor: "divider",
@@ -87,10 +95,6 @@ export default function EmployeeCard({
                 },
             }}
         >
-            {/* ─────────────────────────────
-                Employee Header
-            ───────────────────────────── */}
-
             <Stack
                 direction="row"
                 justifyContent="space-between"
@@ -148,8 +152,6 @@ export default function EmployeeCard({
                     </Box>
                 </Stack>
 
-                {/* Status indicator */}
-
                 <Box
                     title={employee.status}
                     sx={{
@@ -164,19 +166,17 @@ export default function EmployeeCard({
                 />
             </Stack>
 
-            {/* ─────────────────────────────
-                Department
-            ───────────────────────────── */}
-
             <Chip
                 label={employee.department}
                 size="small"
                 sx={{
                     mt: 2.5,
                     color: "primary.main",
-                    backgroundColor: "rgba(124,92,252,0.10)",
+                    backgroundColor:
+                        "rgba(124,92,252,0.10)",
                     border: "1px solid",
-                    borderColor: "rgba(124,92,252,0.14)",
+                    borderColor:
+                        "rgba(124,92,252,0.14)",
                     fontWeight: 600,
 
                     "& .MuiChip-label": {
@@ -185,23 +185,13 @@ export default function EmployeeCard({
                 }}
             />
 
-            {/* ─────────────────────────────
-                Divider
-            ───────────────────────────── */}
-
             <Divider
                 sx={{
                     my: 2,
                 }}
             />
 
-            {/* ─────────────────────────────
-                Employee Details
-            ───────────────────────────── */}
-
             <Stack spacing={1.2}>
-                {/* Email */}
-
                 <Stack
                     direction="row"
                     spacing={1}
@@ -229,8 +219,6 @@ export default function EmployeeCard({
                         {employee.email}
                     </Typography>
                 </Stack>
-
-                {/* Location */}
 
                 <Stack
                     direction="row"
@@ -261,39 +249,69 @@ export default function EmployeeCard({
                 </Stack>
             </Stack>
 
-
-
-            <Button
-                fullWidth
-                variant="outlined"
-                endIcon={<ArrowForwardRounded />}
-                onClick={() => onViewProfile(employee)}
+            <Stack
+                direction="row"
+                spacing={1}
                 sx={{
                     mt: 2.5,
-
-                    borderColor: "divider",
-                    color: "text.primary",
-
-                    "& .MuiButton-endIcon": {
-                        transition:
-                            "transform 0.25s ease",
-                    },
-
-                    "&:hover": {
-                        borderColor: "primary.main",
-                        color: "primary.main",
-                        backgroundColor:
-                            "rgba(124,92,252,0.05)",
-
-                        "& .MuiButton-endIcon": {
-                            transform:
-                                "translateX(4px)",
-                        },
-                    },
                 }}
             >
-                View Profile
-            </Button>
+                <Button
+                    fullWidth
+                    variant="outlined"
+                    endIcon={<ArrowForwardRounded />}
+                    onClick={() =>
+                        onViewProfile(employee)
+                    }
+                    sx={{
+                        borderColor: "divider",
+                        color: "text.primary",
+
+                        "& .MuiButton-endIcon": {
+                            transition:
+                                "transform 0.25s ease",
+                        },
+
+                        "&:hover": {
+                            borderColor:
+                                "primary.main",
+                            color: "primary.main",
+                            backgroundColor:
+                                "rgba(124,92,252,0.05)",
+
+                            "& .MuiButton-endIcon": {
+                                transform:
+                                    "translateX(4px)",
+                            },
+                        },
+                    }}
+                >
+                    View Profile
+                </Button>
+
+                {isAdmin && (
+                    <Button
+                        variant="outlined"
+                        onClick={() =>
+                            onDelete(employee)
+                        }
+                        sx={{
+                            minWidth: 48,
+                            borderColor: "divider",
+                            color: "error.main",
+
+                            "&:hover": {
+                                borderColor:
+                                    "error.main",
+                                backgroundColor:
+                                    "rgba(239,68,68,0.06)",
+                            },
+                        }}
+                    >
+                        <DeleteRounded />
+                    </Button>
+                )}
+            </Stack>
         </MotionPaper>
     );
 }

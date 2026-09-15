@@ -4,6 +4,7 @@ import EmployeeCard from "./EmployeeCard";
 export default function EmployeeGrid({
     employees,
     onViewProfile,
+    onDelete,
 }) {
     return (
         <Box
@@ -37,6 +38,7 @@ export default function EmployeeGrid({
                         employee={employee}
                         index={index}
                         onViewProfile={onViewProfile}
+                        onDelete={onDelete}
                     />
                 </Box>
             ))}

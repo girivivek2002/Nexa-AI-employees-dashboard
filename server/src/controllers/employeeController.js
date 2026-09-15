@@ -42,3 +42,37 @@ export const createEmployee = async (req, res) => {
         });
     }
 };
+
+export const deleteEmployee = async (req, res) => {
+    try {
+        const employee = await Employee.findById(req.params.id);
+
+        if (!employee) {
+            return res.status(404).json({
+                success: false,
+                message: "Employee not found",
+            });
+        }
+
+        await employee.deleteOne();
+
+        res.status(200).json({
+            success: true,
+            message: "Employee deleted successfully",
+        });
+    } catch (error) {
+        console.error("Delete employee error:", error);
+
+        if (error.name === "CastError") {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid employee ID",
+            });
+        }
+
+        res.status(500).json({
+            success: false,
+            message: "Failed to delete employee",
+        });
+    }
+};

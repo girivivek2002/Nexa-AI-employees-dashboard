@@ -15,6 +15,7 @@ export default function Employees() {
     const {
         employees,
         addEmployee,
+        deleteEmployee: removeEmployee,
     } = useEmployees();
 
     const [search, setSearch] = useState("");
@@ -62,7 +63,7 @@ export default function Employees() {
     const handleAddEmployee = async (employee) => {
         try {
             const newEmployee =
-                addEmployee(employee);
+                await addEmployee(employee);
 
             setAddDrawerOpen(false);
 
@@ -71,9 +72,46 @@ export default function Employees() {
             );
         } catch (error) {
             toast.error(
-                "Failed to save employee",
-            )
+                error?.response?.data?.message ||
+                "Failed to save employee"
+            );
+
             console.error(error);
+        }
+    };
+
+    const handleDeleteEmployee = async (employee) => {
+        const confirmed = window.confirm(
+            `Are you sure you want to delete ${employee.name}?`
+        );
+
+        if (!confirmed) return;
+
+        try {
+            await removeEmployee(
+                employee._id || employee.id
+            );
+
+            if (
+                selectedEmployee?._id === employee._id ||
+                selectedEmployee?.id === employee.id
+            ) {
+                setSelectedEmployee(null);
+            }
+
+            toast.success(
+                `${employee.name} deleted successfully`
+            );
+        } catch (error) {
+            console.error(
+                "Delete employee error:",
+                error
+            );
+
+            toast.error(
+                error?.response?.data?.message ||
+                "Failed to delete employee"
+            );
         }
     };
 
@@ -102,6 +140,7 @@ export default function Employees() {
                 <EmployeeGrid
                     employees={filteredEmployees}
                     onViewProfile={setSelectedEmployee}
+                    onDelete={handleDeleteEmployee}
                 />
             ) : (
                 <EmptyState
