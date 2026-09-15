@@ -89,6 +89,7 @@ Features:
 Admin-only dashboard available at `/admin`.
 
 ADMIN_EMAIL= nexaadmin@gmail.com
+
 ADMIN_PASSWORD= NexaAdmin@123
 
 Admin features:
